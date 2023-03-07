@@ -1,3 +1,4 @@
+import type { User } from "@prisma/client";
 import { prisma } from "~/db.server";
 
 export const getQuestionById = async ({
@@ -26,15 +27,17 @@ export const getManyQuestionById = async ({
 
 export const updateQuestionById = async ({
   questionIdAndValue,
+  prop,
 }: {
   questionIdAndValue: { id: string; value: number };
+  prop: string;
 }) => {
   return await prisma.question.update({
     where: {
       id: questionIdAndValue.id,
     },
     data: {
-      review: questionIdAndValue.value,
+      [prop]: questionIdAndValue.value,
     },
   });
 };
@@ -55,3 +58,62 @@ export const generateStandardQuestion = async ({
     ],
   });
 };
+
+export async function getUsersQuestionsWithoutProp({
+  id,
+  prop,
+}: {
+  id: User["id"];
+  prop: string;
+}) {
+  return prisma.user.findUnique({
+    where: { id },
+    select: {
+      questions: {
+        where: {
+          [prop]: undefined || null,
+        },
+      },
+    },
+  });
+}
+
+export async function getUsersQuestionsReview({ id }: { id: User["id"] }) {
+  return prisma.user.findUnique({
+    where: { id },
+
+    select: {
+      questions: {
+        orderBy: {
+          createdAt: "desc",
+        },
+        where: {
+          review: { not: undefined || null },
+        },
+      },
+    },
+  });
+}
+
+export async function getSubordinatesQuestionsWithoutReview({
+  subIds,
+}: {
+  subIds: string[];
+}) {
+  return prisma.user.findMany({
+    where: { id: { in: subIds } },
+
+    select: {
+      questions: {
+        orderBy: {
+          createdAt: "desc",
+        },
+        where: {
+          managerReview: undefined || null,
+        },
+      },
+      email: true,
+      id: true,
+    },
+  });
+}

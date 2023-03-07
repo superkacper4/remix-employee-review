@@ -4,19 +4,21 @@ import invariant from "tiny-invariant";
 import { requireUser } from "~/session.server";
 import { reduce } from "ramda";
 import {
-  getManyQuestionById,
+  getUsersQuestionsWithoutProp,
   updateQuestionById,
 } from "~/models/question.server";
 import type { ActionFunction } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import { Form, useLoaderData } from "@remix-run/react";
 import type { Question } from "@prisma/client";
-import { getUsersQuestionsWithoutReview } from "~/models/user.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUser(request);
 
-  const questions = await getUsersQuestionsWithoutReview({ id: user.id });
+  const questions = await getUsersQuestionsWithoutProp({
+    id: user.id,
+    prop: "review",
+  });
 
   return json({
     questions: questions?.questions,
@@ -26,7 +28,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 export const action: ActionFunction = async ({ request }) => {
   const user = await requireUser(request);
 
-  const questionsOnUser = await getUsersQuestionsWithoutReview({ id: user.id });
+  const questionsOnUser = await getUsersQuestionsWithoutProp({
+    id: user.id,
+    prop: "review",
+  });
 
   const formData = await request.formData();
 
@@ -47,7 +52,7 @@ export const action: ActionFunction = async ({ request }) => {
   );
 
   formValues.forEach(async (value) => {
-    await updateQuestionById({ questionIdAndValue: value });
+    await updateQuestionById({ questionIdAndValue: value, prop: "review" });
   });
 
   console.log("fromValues: ", formValues);

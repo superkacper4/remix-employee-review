@@ -9,40 +9,6 @@ export async function getUserById(id: User["id"]) {
   return prisma.user.findUnique({ where: { id } });
 }
 
-export async function getUsersQuestionsWithoutReview({
-  id,
-}: {
-  id: User["id"];
-}) {
-  return prisma.user.findUnique({
-    where: { id },
-    select: {
-      questions: {
-        where: {
-          review: undefined || null,
-        },
-      },
-    },
-  });
-}
-
-export async function getUsersQuestionsReview({ id }: { id: User["id"] }) {
-  return prisma.user.findUnique({
-    where: { id },
-
-    select: {
-      questions: {
-        orderBy: {
-          createdAt: "desc",
-        },
-        where: {
-          review: { not: undefined || null },
-        },
-      },
-    },
-  });
-}
-
 export async function getUserByEmail(email: User["email"]) {
   return prisma.user.findUnique({ where: { email } });
 }
@@ -94,3 +60,11 @@ export async function verifyLogin(
 
   return userWithoutPassword;
 }
+
+export const getSubordinates = async ({ managerId }: { managerId: string }) => {
+  return await prisma.user.findMany({
+    where: {
+      managerId,
+    },
+  });
+};
