@@ -1,6 +1,18 @@
-import { Link } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
+import type { ActionFunction } from "@remix-run/server-runtime";
+import { redirect } from "@remix-run/server-runtime";
+import { generateStandardQuestion } from "~/models/question.server";
+import { requireUserId } from "~/session.server";
 
 import { useOptionalUser } from "~/utils";
+
+export const action: ActionFunction = async ({ request }) => {
+  const userId = await requireUserId(request);
+
+  await generateStandardQuestion({ userId: String(userId) });
+
+  return redirect("/review");
+};
 
 export default function Index() {
   const user = useOptionalUser();
@@ -8,6 +20,11 @@ export default function Index() {
     <main className="relative min-h-screen bg-white sm:flex sm:items-center sm:justify-center">
       {user ? (
         <>
+          <Form method="post">
+            <button type="submit" name="generateQuestions">
+              Wygeneruj pytania
+            </button>
+          </Form>
           <Link
             to="/review"
             className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-3 text-base font-medium text-yellow-700 shadow-sm hover:bg-yellow-50 sm:px-8"

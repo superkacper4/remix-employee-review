@@ -38,3 +38,20 @@ export const updateQuestionById = async ({
     },
   });
 };
+
+export const generateStandardQuestion = async ({
+  userId,
+}: {
+  userId: string;
+}) => {
+  return await prisma.question.createMany({
+    data: [
+      {
+        message: "Czy jesteś zadowolony z pracy?",
+        userId,
+      },
+      { message: "A jak bardzo?", userId },
+      { message: "A suprer jest?", userId },
+    ],
+  });
+};
