@@ -1,78 +1,64 @@
 import React from "react";
 import type { LoaderFunction } from "react-router";
 import invariant from "tiny-invariant";
-import { getQuestionsOnUser } from "~/models/questionsOnUsers";
 import { requireUser } from "~/session.server";
 import { reduce } from "ramda";
-import {
-  getManyQuestionById,
-  getQuestionById,
-  updateQuestionById,
-} from "~/models/question";
+import { getManyQuestionById, updateQuestionById } from "~/models/question";
 import type { ActionFunction } from "@remix-run/server-runtime";
-import { redirect } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import { Form, useLoaderData } from "@remix-run/react";
 import type { Question } from "@prisma/client";
+import { getUsersQuestionsWithoutReview } from "~/models/user.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUser(request);
 
-  const questionsOnUser = await getQuestionsOnUser({ userId: user.id });
-  const arrayOfQuestionIds = questionsOnUser.map(
-    (question) => question.questionId
-  );
-
-  const arrayOfQuestion = await getManyQuestionById({
-    questionIds: arrayOfQuestionIds,
-  });
+  const questions = await getUsersQuestionsWithoutReview({ id: user.id });
 
   return json({
-    arrayOfQuestion,
+    questions: questions?.questions,
   });
 };
 
 export const action: ActionFunction = async ({ request }) => {
   const user = await requireUser(request);
 
-  const questionsOnUser = await getQuestionsOnUser({ userId: user.id });
-  const arrayOfQuestionIds = questionsOnUser.map(
-    (question) => question.questionId
-  );
+  const questionsOnUser = await getUsersQuestionsWithoutReview({ id: user.id });
 
   const formData = await request.formData();
 
+  invariant(questionsOnUser, "Questions are required");
+
   const formValues = reduce(
-    (accumulator, currentValue) => {
+    (accumulator: { id: string; value: number }[], currentValue: Question) => {
       return [
         ...accumulator,
         {
-          id: currentValue,
-          value: Number(formData.get(currentValue)),
+          id: currentValue.id,
+          value: Number(formData.get(currentValue.id)),
         },
       ];
     },
     [],
-    arrayOfQuestionIds
+    questionsOnUser.questions
   );
-  const x = Object.entries(formValues);
 
   formValues.forEach(async (value) => {
     await updateQuestionById({ questionIdAndValue: value });
   });
 
-  console.log(x[0][0], formValues);
+  console.log("fromValues: ", formValues);
 
   return null;
 };
 
 const ReviewPage = () => {
-  const { arrayOfQuestion } = useLoaderData<typeof loader>();
+  const { questions } = useLoaderData<typeof loader>();
   return (
     <div>
       <h1>Ankieta pracownicza</h1>
       <Form method="post">
-        {arrayOfQuestion.map((question: Question) => (
+        {questions.map((question: Question) => (
           <div key={question.id}>
             <p>{question.message}</p>
             <p>{question.review}</p>

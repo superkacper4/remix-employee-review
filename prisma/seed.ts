@@ -9,7 +9,6 @@ async function seed() {
   // cleanup the existing database
   await prisma.user.deleteMany({});
   await prisma.question.deleteMany({});
-  await prisma.questionsOnUsers.deleteMany({});
 
   const hashedPassword = await bcrypt.hash("admin123", 10);
 
@@ -27,12 +26,6 @@ async function seed() {
   const question = await prisma.question.create({
     data: {
       message: "Czy jesteś zadowolony z pracy?",
-    },
-  });
-
-  await prisma.questionsOnUsers.create({
-    data: {
-      questionId: question.id,
       userId: user.id,
     },
   });
