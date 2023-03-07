@@ -11,7 +11,7 @@ import type { ActionFunction } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import { Form, useLoaderData } from "@remix-run/react";
 import { getSubordinates } from "~/models/user.server";
-import type { Question } from "@prisma/client";
+import type { Question, User } from "@prisma/client";
 import { reduce } from "ramda";
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -34,8 +34,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const userId = await requireUserId(request);
-
   const formData = await request.formData();
   const subId = formData.get("subId");
 
@@ -77,12 +75,12 @@ const ReviewPage = () => {
   return (
     <div>
       <h1>Podwładni</h1>
-      {subordinatesQuestions.map((sub) => {
+      {subordinatesQuestions.map((sub: User & { questions: Question[] }) => {
         return (
           <Form method="post" key={sub.id}>
             <p>{sub.email}</p>
             <p>{sub.id}</p>
-            {sub.questions.map((question) => (
+            {sub.questions.map((question: Question) => (
               <div key={question.id}>
                 <p>{question.message}</p>
                 <p>{question.review}</p>
