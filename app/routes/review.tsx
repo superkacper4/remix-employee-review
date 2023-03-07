@@ -3,7 +3,10 @@ import type { LoaderFunction } from "react-router";
 import invariant from "tiny-invariant";
 import { requireUser } from "~/session.server";
 import { reduce } from "ramda";
-import { getManyQuestionById, updateQuestionById } from "~/models/question";
+import {
+  getManyQuestionById,
+  updateQuestionById,
+} from "~/models/question.server";
 import type { ActionFunction } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import { Form, useLoaderData } from "@remix-run/react";

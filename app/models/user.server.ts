@@ -26,6 +26,19 @@ export async function getUsersQuestionsWithoutReview({
   });
 }
 
+export async function getUsersQuestionsReview({ id }: { id: User["id"] }) {
+  return prisma.user.findUnique({
+    where: { id },
+    select: {
+      questions: {
+        where: {
+          review: { not: undefined || null },
+        },
+      },
+    },
+  });
+}
+
 export async function getUserByEmail(email: User["email"]) {
   return prisma.user.findUnique({ where: { email } });
 }
