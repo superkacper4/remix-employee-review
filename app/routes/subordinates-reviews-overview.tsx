@@ -13,6 +13,7 @@ import { Form, useLoaderData } from "@remix-run/react";
 import { getSubordinates } from "~/models/user.server";
 import type { Question, User } from "@prisma/client";
 import { reduce } from "ramda";
+import Table from "~/components/Table/Table";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = await requireUserId(request);
@@ -43,14 +44,12 @@ const SubordinatesReviewPage = () => {
               <div>
                 <p>{sub.email}</p>
                 <p>{sub.id}</p>
-                {sub.questions.map((question: Question) => (
-                  <div key={question.id}>
-                    <p>{question.message}</p>
-                    <p>{question.review}</p>
-                    <p>{question.managerReview}</p>
-                    <p>{String(question.createdAt)}</p>
-                  </div>
-                ))}
+                <Table
+                  isViewOnly
+                  subId={sub.id}
+                  questions={sub.questions}
+                  isManagerView
+                />
               </div>
             )}
           </>

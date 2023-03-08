@@ -11,6 +11,7 @@ import type { ActionFunction } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import { Form, useLoaderData } from "@remix-run/react";
 import type { Question } from "@prisma/client";
+import Table from "~/components/Table/Table";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUser(request);
@@ -66,13 +67,8 @@ const ReviewPage = () => {
     <div>
       <h1>Ankieta pracownicza</h1>
       <Form method="post">
-        {questions.map((question: Question) => (
-          <div key={question.id}>
-            <p>{question.message}</p>
-            <p>{question.review}</p>
-            <input type="number" name={question.id} />
-          </div>
-        ))}
+        <Table questions={questions} />
+
         <button type="submit">Zatwierdź</button>
       </Form>
     </div>
