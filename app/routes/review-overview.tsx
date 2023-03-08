@@ -19,7 +19,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   });
 };
 
-const ReviewPage = () => {
+const ReviewOverviewPage = () => {
   const { questions } = useLoaderData<typeof loader>();
   return (
     <div>
@@ -35,4 +35,4 @@ const ReviewPage = () => {
   );
 };
 
-export default ReviewPage;
+export default ReviewOverviewPage;

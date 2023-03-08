@@ -117,3 +117,26 @@ export async function getSubordinatesQuestionsWithoutReview({
     },
   });
 }
+
+export async function getSubordinatesQuestionsWithReview({
+  subIds,
+}: {
+  subIds: string[];
+}) {
+  return prisma.user.findMany({
+    where: { id: { in: subIds } },
+
+    select: {
+      questions: {
+        orderBy: {
+          createdAt: "desc",
+        },
+        where: {
+          managerReview: { not: undefined || null },
+        },
+      },
+      email: true,
+      id: true,
+    },
+  });
+}

@@ -3,7 +3,7 @@ import type { LoaderFunction } from "react-router";
 import invariant from "tiny-invariant";
 import { requireUserId } from "~/session.server";
 import {
-  getSubordinatesQuestionsWithoutReview,
+  getSubordinatesQuestionsWithReview,
   getUsersQuestionsWithoutProp,
   updateQuestionById,
 } from "~/models/question.server";
@@ -20,54 +20,15 @@ export const loader: LoaderFunction = async ({ request }) => {
   const subordinates = await getSubordinates({ managerId: userId });
   const subIds = subordinates.map((sub) => sub.id);
 
-  const subordinatesQuestions = await getSubordinatesQuestionsWithoutReview({
+  const subordinatesQuestions = await getSubordinatesQuestionsWithReview({
     subIds,
   });
-
-  console.log("subordinatesQuestions", subordinatesQuestions);
 
   //   invariant(questions, "Questoins are required");
 
   return json({
     subordinatesQuestions,
   });
-};
-
-export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-  const subId = formData.get("subId");
-
-  const questionsOnSubordinate = await getUsersQuestionsWithoutProp({
-    id: String(subId),
-    prop: "managerReview",
-  });
-
-  invariant(questionsOnSubordinate, "Questions are required");
-
-  const formValues = reduce(
-    (accumulator: { id: string; value: number }[], currentValue: Question) => {
-      return [
-        ...accumulator,
-        {
-          id: currentValue.id,
-          value: Number(formData.get(currentValue.id)),
-        },
-      ];
-    },
-    [],
-    questionsOnSubordinate.questions
-  );
-
-  formValues.forEach(async (value) => {
-    await updateQuestionById({
-      questionIdAndValue: value,
-      prop: "managerReview",
-    });
-  });
-
-  console.log("fromValues: ", formValues);
-
-  return null;
 };
 
 const SubordinatesReviewPage = () => {
@@ -79,20 +40,18 @@ const SubordinatesReviewPage = () => {
         return (
           <>
             {sub.questions.length > 0 && (
-              <Form method="post" key={sub.id}>
+              <div>
                 <p>{sub.email}</p>
                 <p>{sub.id}</p>
                 {sub.questions.map((question: Question) => (
                   <div key={question.id}>
                     <p>{question.message}</p>
                     <p>{question.review}</p>
+                    <p>{question.managerReview}</p>
                     <p>{String(question.createdAt)}</p>
-                    <input type="number" name={question.id} />
-                    <input type="hidden" name="subId" value={sub.id} />
                   </div>
                 ))}
-                <button type="submit">Zatwierdź dla {sub.email}</button>
-              </Form>
+              </div>
             )}
           </>
         );
