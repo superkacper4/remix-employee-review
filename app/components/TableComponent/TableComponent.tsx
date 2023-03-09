@@ -1,7 +1,6 @@
 import type { Question } from "@prisma/client";
 import React from "react";
 import Td from "../Td";
-import Th from "../Th";
 import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 
 const ManagerReviewPanel = ({
@@ -66,7 +65,7 @@ const TableComponent = ({
     <Table>
       <TableHead>
         <TableRow>
-          <Td className="text-pink-500">Data</Td>
+          <Td>Data</Td>
           <Td>Pytanie</Td>
           <Td>Opinia pracownika</Td>
           <Td>Opinia kierownika</Td>

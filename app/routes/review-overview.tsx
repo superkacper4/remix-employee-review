@@ -6,6 +6,9 @@ import { getUsersQuestionsReview } from "~/models/question.server";
 import { json } from "@remix-run/server-runtime";
 import { useLoaderData } from "@remix-run/react";
 import TableComponent from "~/components/TableComponent/TableComponent";
+import Wrapper from "~/components/Wrapper";
+import NavBar from "~/components/NavBar/NavBar";
+import H1 from "~/components/H1";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUser(request);
@@ -22,10 +25,11 @@ export const loader: LoaderFunction = async ({ request }) => {
 const ReviewOverviewPage = () => {
   const { questions } = useLoaderData<typeof loader>();
   return (
-    <div>
-      <h1>Ankieta pracownicza</h1>
+    <Wrapper>
+      <NavBar />
+      <H1>Ankieta pracownicza</H1>
       <TableComponent questions={questions} isViewOnly />
-    </div>
+    </Wrapper>
   );
 };
 

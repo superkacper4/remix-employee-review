@@ -9,7 +9,7 @@ const Td = ({
   className?: string;
 }) => {
   return (
-    <TableCell className={className} align="center">
+    <TableCell color="white" className={className} align="center">
       {children}
     </TableCell>
   );

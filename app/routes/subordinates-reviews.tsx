@@ -14,6 +14,9 @@ import { calculateBonus, getSubordinates } from "~/models/user.server";
 import type { Question, User } from "@prisma/client";
 import { reduce } from "ramda";
 import TableComponent from "~/components/TableComponent/TableComponent";
+import Wrapper from "~/components/Wrapper";
+import NavBar from "~/components/NavBar/NavBar";
+import H1 from "~/components/H1";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = await requireUserId(request);
@@ -70,8 +73,9 @@ export const action: ActionFunction = async ({ request }) => {
 const SubordinatesReviewPage = () => {
   const { subordinatesQuestions } = useLoaderData<typeof loader>();
   return (
-    <div>
-      <h1>Podwładni</h1>
+    <Wrapper>
+      <NavBar />
+      <H1>Podwładni</H1>
       {subordinatesQuestions.map((sub: User & { questions: Question[] }) => {
         return (
           <>
@@ -90,7 +94,7 @@ const SubordinatesReviewPage = () => {
           </>
         );
       })}
-    </div>
+    </Wrapper>
   );
 };
 

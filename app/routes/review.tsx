@@ -12,6 +12,9 @@ import { json } from "@remix-run/server-runtime";
 import { Form, useLoaderData } from "@remix-run/react";
 import type { Question } from "@prisma/client";
 import TableComponent from "~/components/TableComponent/TableComponent";
+import Wrapper from "~/components/Wrapper";
+import NavBar from "~/components/NavBar/NavBar";
+import H1 from "~/components/H1";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUser(request);
@@ -62,14 +65,15 @@ export const action: ActionFunction = async ({ request }) => {
 const ReviewPage = () => {
   const { questions } = useLoaderData<typeof loader>();
   return (
-    <div>
-      <h1>Ankieta pracownicza</h1>
+    <Wrapper>
+      <NavBar />
+      <H1>Ankieta pracownicza</H1>
       <Form method="post">
         <TableComponent questions={questions} />
 
         <button type="submit">Zatwierdź</button>
       </Form>
-    </div>
+    </Wrapper>
   );
 };
 
