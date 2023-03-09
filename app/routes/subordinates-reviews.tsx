@@ -10,7 +10,7 @@ import {
 import type { ActionFunction } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import { Form, useLoaderData } from "@remix-run/react";
-import { getSubordinates } from "~/models/user.server";
+import { calculateBonus, getSubordinates } from "~/models/user.server";
 import type { Question, User } from "@prisma/client";
 import { reduce } from "ramda";
 import Table from "~/components/Table/Table";
@@ -24,10 +24,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   const subordinatesQuestions = await getSubordinatesQuestionsWithoutReview({
     subIds,
   });
-
-  console.log("subordinatesQuestions", subordinatesQuestions);
-
-  //   invariant(questions, "Questoins are required");
 
   return json({
     subordinatesQuestions,
@@ -66,7 +62,7 @@ export const action: ActionFunction = async ({ request }) => {
     });
   });
 
-  console.log("fromValues: ", formValues);
+  await calculateBonus({ userId: String(subId) });
 
   return null;
 };

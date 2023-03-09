@@ -18,6 +18,9 @@ model User {
   manager       User?   @relation("ManagerSubordinates", fields: [managerId], references: [id])
   subordinates  User[]  @relation("ManagerSubordinates")
 
+  maxBonusValue      Int?
+  bonusPercentValue  Int?
+
   password Password?
   
   questions    Question[]
@@ -30,24 +33,15 @@ model Password {
   userId String @unique
 }
 
-// model QuestionsOnUsers {
-//   question   Question   @relation(fields: [questionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//   questionId String 
-
-//   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//   userId String
-
-//   @@id([questionId, userId])
-// }
-
-
-
 model Question {
   id      String @id @default(cuid())
   message String
 
   review Int?
   managerReview Int?
+
+  managerReviewThresshold Int? // value which manager should give to earn bonus
+  bonusPercentValue       Int?
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String

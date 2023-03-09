@@ -56,8 +56,6 @@ export const action: ActionFunction = async ({ request }) => {
     await updateQuestionById({ questionIdAndValue: value, prop: "review" });
   });
 
-  console.log("fromValues: ", formValues);
-
   return null;
 };
 

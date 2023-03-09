@@ -71,6 +71,7 @@ const Table = ({
       <Th>Pytanie</Th>
       <Th>Opinia pracownika</Th>
       <Th>Opinia kierownika</Th>
+      <Th>Procnet premii</Th>
       {questions.map((question: Question) => (
         <tr key={question.id}>
           <Td>{String(question.createdAt).slice(0, 10)}</Td>
@@ -92,6 +93,7 @@ const Table = ({
             question={question}
             subId={subId}
           />
+          <Td>{question.bonusPercentValue} %</Td>
         </tr>
       ))}
     </table>

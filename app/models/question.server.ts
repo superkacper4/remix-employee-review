@@ -140,3 +140,29 @@ export async function getSubordinatesQuestionsWithReview({
     },
   });
 }
+
+export async function getQuestionsMangerRevNewerThan({
+  userId,
+}: {
+  userId: string;
+}) {
+  const now = new Date();
+
+  const weekAgo = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() - 7
+  ).toISOString();
+
+  return prisma.question.findMany({
+    where: {
+      AND: {
+        userId,
+        managerReview: { not: undefined || null },
+        createdAt: {
+          gte: weekAgo,
+        },
+      },
+    },
+  });
+}
