@@ -52,9 +52,21 @@ export const generateStandardQuestion = async ({
       {
         message: "Czy jesteś zadowolony z pracy?",
         userId,
+        managerReviewThresshold: 2,
+        bonusPercentValue: 10,
       },
-      { message: "A jak bardzo?", userId },
-      { message: "A suprer jest?", userId },
+      {
+        message: "A jak bardzo?",
+        userId,
+        managerReviewThresshold: 2,
+        bonusPercentValue: 10,
+      },
+      {
+        message: "A suprer jest?",
+        userId,
+        managerReviewThresshold: 2,
+        bonusPercentValue: 10,
+      },
     ],
   });
 };
@@ -71,7 +83,7 @@ export async function getUsersQuestionsWithoutProp({
     select: {
       questions: {
         where: {
-          [prop]: undefined || null,
+          [prop]: 0,
         },
       },
     },
@@ -88,7 +100,7 @@ export async function getUsersQuestionsReview({ id }: { id: User["id"] }) {
           createdAt: "desc",
         },
         where: {
-          review: { not: undefined || null },
+          review: { not: 0 },
         },
       },
     },
@@ -109,7 +121,7 @@ export async function getSubordinatesQuestionsWithoutReview({
           createdAt: "desc",
         },
         where: {
-          managerReview: undefined || null,
+          managerReview: 0,
         },
       },
       email: true,
@@ -132,7 +144,7 @@ export async function getSubordinatesQuestionsWithReview({
           createdAt: "desc",
         },
         where: {
-          managerReview: { not: undefined || null },
+          managerReview: { not: 0 },
         },
       },
       email: true,
@@ -158,7 +170,7 @@ export async function getQuestionsMangerRevNewerThan({
     where: {
       AND: {
         userId,
-        managerReview: { not: undefined || null },
+        managerReview: { not: 0 },
         createdAt: {
           gte: weekAgo,
         },

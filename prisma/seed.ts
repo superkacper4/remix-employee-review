@@ -39,6 +39,8 @@ async function seed() {
     data: {
       message: "Czy jesteś zadowolony/a z pracy?",
       userId: user1.id,
+      managerReviewThresshold: 2,
+      bonusPercentValue: 10,
     },
   });
 
@@ -46,6 +48,8 @@ async function seed() {
     data: {
       message: "Czy jesteś zadowolony/a z pracy?",
       userId: user2.id,
+      managerReviewThresshold: 2,
+      bonusPercentValue: 10,
     },
   });
 

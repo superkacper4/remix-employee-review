@@ -37,11 +37,11 @@ model Question {
   id      String @id @default(cuid())
   message String
 
-  review Int?
-  managerReview Int?
+  review        Int @default(0)
+  managerReview Int @default(0)
 
-  managerReviewThresshold Int? // value which manager should give to earn bonus
-  bonusPercentValue       Int?
+  managerReviewThresshold Int  // value which manager should give to earn bonus
+  bonusPercentValue       Int 
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String

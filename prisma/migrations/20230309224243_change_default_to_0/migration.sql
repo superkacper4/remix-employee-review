@@ -18,25 +18,14 @@ CREATE TABLE "Password" (
 );
 
 -- CreateTable
-CREATE TABLE "Sheet" (
-    "id" TEXT NOT NULL,
-    "resolved" BOOLEAN NOT NULL,
-    "userId" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Sheet_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Question" (
     "id" TEXT NOT NULL,
     "message" TEXT NOT NULL,
-    "review" INTEGER,
-    "managerReview" INTEGER,
-    "managerReviewThresshold" INTEGER,
-    "bonusPercentValue" INTEGER,
-    "sheetId" TEXT NOT NULL,
+    "review" INTEGER NOT NULL DEFAULT 0,
+    "managerReview" INTEGER NOT NULL DEFAULT 0,
+    "managerReviewThresshold" INTEGER NOT NULL,
+    "bonusPercentValue" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -56,7 +45,4 @@ ALTER TABLE "User" ADD CONSTRAINT "User_managerId_fkey" FOREIGN KEY ("managerId"
 ALTER TABLE "Password" ADD CONSTRAINT "Password_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Sheet" ADD CONSTRAINT "Sheet_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Question" ADD CONSTRAINT "Question_sheetId_fkey" FOREIGN KEY ("sheetId") REFERENCES "Sheet"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Question" ADD CONSTRAINT "Question_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
