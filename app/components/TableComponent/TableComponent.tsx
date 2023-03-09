@@ -2,6 +2,7 @@ import type { Question } from "@prisma/client";
 import React from "react";
 import Td from "../Td";
 import Th from "../Th";
+import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 
 const ManagerReviewPanel = ({
   isManagerView,
@@ -48,7 +49,7 @@ const ManagerReviewPanel = ({
   );
 };
 
-const Table = ({
+const TableComponent = ({
   children,
   subId,
   isViewOnly,
@@ -62,21 +63,22 @@ const Table = ({
   isManagerView?: boolean;
 }) => {
   return (
-    <table
-      style={{
-        border: "1px solid black",
-      }}
-    >
-      <Th>Data</Th>
-      <Th>Pytanie</Th>
-      <Th>Opinia pracownika</Th>
-      <Th>Opinia kierownika</Th>
-      <Th>Procnet premii</Th>
-      {questions.map((question: Question) => (
-        <tr key={question.id}>
-          <Td>{String(question.createdAt).slice(0, 10)}</Td>
-          <Td>{question.message}</Td>
-          {/* <Td>{question.review}</Td>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <Td className="text-pink-500">Data</Td>
+          <Td>Pytanie</Td>
+          <Td>Opinia pracownika</Td>
+          <Td>Opinia kierownika</Td>
+          <Td>Procnet premii</Td>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {questions.map((question: Question) => (
+          <TableRow key={question.id} hover>
+            <Td>{String(question.createdAt).slice(0, 10)}</Td>
+            <Td>{question.message}</Td>
+            {/* <Td>{question.review}</Td>
           {!isViewOnly ? (
             <>
               <Td>
@@ -87,17 +89,28 @@ const Table = ({
           ) : (
             <Td>{question.managerReview}</Td>
           )} */}
-          <ManagerReviewPanel
-            isManagerView={isManagerView}
-            isViewOnly={isViewOnly}
-            question={question}
-            subId={subId}
-          />
-          <Td>{question.bonusPercentValue} %</Td>
-        </tr>
-      ))}
-    </table>
+            <ManagerReviewPanel
+              isManagerView={isManagerView}
+              isViewOnly={isViewOnly}
+              question={question}
+              subId={subId}
+            />
+            <Td>
+              <span
+                className={`${
+                  question.managerReview >= question.managerReviewThresshold
+                    ? "text-lime-500"
+                    : "text-orange-600"
+                }`}
+              >
+                {question.bonusPercentValue} %
+              </span>
+            </Td>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 };
 
-export default Table;
+export default TableComponent;

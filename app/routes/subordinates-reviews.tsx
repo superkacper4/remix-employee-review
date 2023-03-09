@@ -13,7 +13,7 @@ import { Form, useLoaderData } from "@remix-run/react";
 import { calculateBonus, getSubordinates } from "~/models/user.server";
 import type { Question, User } from "@prisma/client";
 import { reduce } from "ramda";
-import Table from "~/components/Table/Table";
+import TableComponent from "~/components/TableComponent/TableComponent";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = await requireUserId(request);
@@ -78,7 +78,11 @@ const SubordinatesReviewPage = () => {
             {sub.questions.length > 0 && (
               <Form method="post" key={sub.id}>
                 <p>{sub.email}</p>
-                <Table subId={sub.id} questions={sub.questions} isManagerView />
+                <TableComponent
+                  subId={sub.id}
+                  questions={sub.questions}
+                  isManagerView
+                />
 
                 <button type="submit">Zatwierdź dla {sub.email}</button>
               </Form>

@@ -5,7 +5,7 @@ import { requireUser } from "~/session.server";
 import { getUsersQuestionsReview } from "~/models/question.server";
 import { json } from "@remix-run/server-runtime";
 import { useLoaderData } from "@remix-run/react";
-import Table from "~/components/Table/Table";
+import TableComponent from "~/components/TableComponent/TableComponent";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUser(request);
@@ -24,7 +24,7 @@ const ReviewOverviewPage = () => {
   return (
     <div>
       <h1>Ankieta pracownicza</h1>
-      <Table questions={questions} isViewOnly />
+      <TableComponent questions={questions} isViewOnly />
     </div>
   );
 };

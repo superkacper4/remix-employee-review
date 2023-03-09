@@ -1,14 +1,17 @@
+import { TableCell } from "@mui/material";
 import React from "react";
 
-const Td = ({ children }: { children: React.ReactNode }) => {
+const Td = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
   return (
-    <td
-      style={{
-        border: "1px solid black",
-      }}
-    >
+    <TableCell className={className} align="center">
       {children}
-    </td>
+    </TableCell>
   );
 };
 

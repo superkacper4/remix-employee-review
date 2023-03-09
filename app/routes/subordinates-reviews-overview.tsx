@@ -6,7 +6,7 @@ import { json } from "@remix-run/server-runtime";
 import { useLoaderData } from "@remix-run/react";
 import { getSubordinates } from "~/models/user.server";
 import type { Question, User } from "@prisma/client";
-import Table from "~/components/Table/Table";
+import TableComponent from "~/components/TableComponent/TableComponent";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = await requireUserId(request);
@@ -37,7 +37,7 @@ const SubordinatesReviewPage = () => {
               <div>
                 <p>{sub.email}</p>
                 <p>{sub.id}</p>
-                <Table
+                <TableComponent
                   isViewOnly
                   subId={sub.id}
                   questions={sub.questions}
