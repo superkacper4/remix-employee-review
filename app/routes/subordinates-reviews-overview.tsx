@@ -1,18 +1,11 @@
 import React from "react";
 import type { LoaderFunction } from "react-router";
-import invariant from "tiny-invariant";
 import { requireUserId } from "~/session.server";
-import {
-  getSubordinatesQuestionsWithReview,
-  getUsersQuestionsWithoutProp,
-  updateQuestionById,
-} from "~/models/question.server";
-import type { ActionFunction } from "@remix-run/server-runtime";
+import { getSubordinatesQuestionsWithReview } from "~/models/question.server";
 import { json } from "@remix-run/server-runtime";
-import { Form, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { getSubordinates } from "~/models/user.server";
 import type { Question, User } from "@prisma/client";
-import { reduce } from "ramda";
 import Table from "~/components/Table/Table";
 
 export const loader: LoaderFunction = async ({ request }) => {

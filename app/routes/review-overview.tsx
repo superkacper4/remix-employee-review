@@ -5,7 +5,6 @@ import { requireUser } from "~/session.server";
 import { getUsersQuestionsReview } from "~/models/question.server";
 import { json } from "@remix-run/server-runtime";
 import { useLoaderData } from "@remix-run/react";
-import type { Question } from "@prisma/client";
 import Table from "~/components/Table/Table";
 
 export const loader: LoaderFunction = async ({ request }) => {

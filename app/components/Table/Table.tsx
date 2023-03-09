@@ -1,4 +1,4 @@
-import type { Question, User } from "@prisma/client";
+import type { Question } from "@prisma/client";
 import React from "react";
 import Td from "../Td";
 import Th from "../Th";

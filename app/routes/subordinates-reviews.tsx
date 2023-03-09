@@ -13,8 +13,6 @@ import { Form, useLoaderData } from "@remix-run/react";
 import { getSubordinates } from "~/models/user.server";
 import type { Question, User } from "@prisma/client";
 import { reduce } from "ramda";
-import Td from "~/components/Td";
-import Th from "~/components/Th";
 import Table from "~/components/Table/Table";
 
 export const loader: LoaderFunction = async ({ request }) => {
