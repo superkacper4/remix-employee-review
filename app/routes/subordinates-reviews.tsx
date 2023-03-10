@@ -72,28 +72,34 @@ export const action: ActionFunction = async ({ request }) => {
 
 const SubordinatesReviewPage = () => {
   const { subordinatesQuestions } = useLoaderData<typeof loader>();
+  console.log("SubordinatesQuestions", subordinatesQuestions);
   return (
     <Wrapper>
       <NavBar />
       <H1>Podwładni</H1>
-      {subordinatesQuestions.map((sub: User & { questions: Question[] }) => {
-        return (
-          <>
-            {sub.questions.length > 0 && (
-              <Form method="post" key={sub.id}>
-                <p>{sub.email}</p>
-                <TableComponent
-                  subId={sub.id}
-                  questions={sub.questions}
-                  isManagerView
-                />
-
-                <button type="submit">Zatwierdź dla {sub.email}</button>
-              </Form>
-            )}
-          </>
-        );
-      })}
+      {subordinatesQuestions.length > 0 ? (
+        subordinatesQuestions.map((sub: User & { questions: Question[] }) => {
+          return (
+            <>
+              {
+                <Form method="post" key={sub.id}>
+                  <p>{sub.email}</p>
+                  <TableComponent
+                    subId={sub.id}
+                    questions={sub.questions}
+                    isManagerView
+                  />
+                  {sub.questions.length > 0 && (
+                    <button type="submit">Zatwierdź dla {sub.email}</button>
+                  )}
+                </Form>
+              }
+            </>
+          );
+        })
+      ) : (
+        <p>Brak podwładnych</p>
+      )}
     </Wrapper>
   );
 };

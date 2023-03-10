@@ -10,7 +10,7 @@ const Td = ({
 }) => {
   return (
     <TableCell color="white" className={className} align="center">
-      {children}
+      {children === 0 ? "-" : children}
     </TableCell>
   );
 };

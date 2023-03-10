@@ -34,23 +34,27 @@ const SubordinatesReviewPage = () => {
     <Wrapper>
       <NavBar />
       <H1>Podwładni</H1>
-      {subordinatesQuestions.map((sub: User & { questions: Question[] }) => {
-        return (
-          <>
-            {sub.questions.length > 0 && (
-              <div>
-                <p>{sub.email}</p>
-                <TableComponent
-                  isViewOnly
-                  subId={sub.id}
-                  questions={sub.questions}
-                  isManagerView
-                />
-              </div>
-            )}
-          </>
-        );
-      })}
+      {subordinatesQuestions.length > 0 ? (
+        subordinatesQuestions.map((sub: User & { questions: Question[] }) => {
+          return (
+            <>
+              {sub.questions.length > 0 && (
+                <div>
+                  <p>{sub.email}</p>
+                  <TableComponent
+                    isViewOnly
+                    subId={sub.id}
+                    questions={sub.questions}
+                    isManagerView
+                  />
+                </div>
+              )}
+            </>
+          );
+        })
+      ) : (
+        <p>Brak podwładnych</p>
+      )}
     </Wrapper>
   );
 };

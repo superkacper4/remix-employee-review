@@ -70,8 +70,7 @@ const ReviewPage = () => {
       <H1>Ankieta pracownicza</H1>
       <Form method="post">
         <TableComponent questions={questions} />
-
-        <button type="submit">Zatwierdź</button>
+        {questions.length > 0 && <button type="submit">Zatwierdź</button>}
       </Form>
     </Wrapper>
   );
